@@ -30,3 +30,33 @@ body {
     background: rgba(0,0,0,0.7);
     z-index: 9;
 }
+
+.btn {
+    padding: 20px 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    font-size: $fs-md;
+    font-weight: $fw-bold;
+    border: 1px solid $clr-orange;
+    background: $clr-orange;
+    color: $clr-white;
+    transition: $ts-200;
+    box-shadow: 0 5px 10px rgba(255, 125, 26, 0.2),
+                0 30px 10px -20px rgba(255, 125, 26, 0.2),
+                0 35px 15px -25px rgba(255, 125, 26, 0.2);
+
+    &:hover {
+        opacity: 0.7;
+    }
+
+    svg {
+        transform: scale(0.8);
+    }
+    path {
+        fill: $clr-white;
+    }
+}

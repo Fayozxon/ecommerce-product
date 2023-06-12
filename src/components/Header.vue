@@ -1,9 +1,14 @@
+<script setup>
+import { store } from '../store.js'
+</script>
+
 <script>
 export default {
     data() {
         return {
             navLinks: ['collections', 'men', 'women', 'about', 'contact'],
-            isNavVisible: false
+            isNavVisible: false,
+            isCartVisible: false
         }
     }
 }
@@ -40,9 +45,36 @@ export default {
             </div>
             <!-- profile -->
             <div class="header__profile">
-                <button class="header__profile--cart-btn">
+                <button class="header__profile--cart-btn" @click="isCartVisible = !isCartVisible">
                     <img src="../assets/icon-cart.svg">
+                    <span v-if="store.productIDs.length" class="notification">{{ store.productIDs.length }}</span>
                 </button>
+                <!-- cart -->
+                <transition name="fade-top">
+                    <div v-if="isCartVisible" class="header__profile--cart">
+                        <h3 class="title">Cart</h3>
+                        <div v-if="store.productIDs.length" class="products">
+                            <transition-group tag="ul" name="list">
+                                <li v-for="product in store.productIDs" :key="product.id" class="product">
+                                    <img :src="`/images/product-${product.id}/image-product-1-thumbnail.jpg`" alt="Product thumbnail">
+                                    <p>
+                                        Fall Limited Edition Sneakers $125.00 x 3 <b>$375.00</b>
+                                    </p>
+                                    <button>
+                                        <img src="../assets/icon-delete.svg">
+                                    </button>
+                                </li>
+                                <button class="btn" key="1">Checkout</button>
+                            </transition-group>
+                        </div>
+                        <div v-else class="msg">
+                            <p>
+                                Your cart is empty
+                            </p>
+                        </div>
+                    </div>
+                </transition>
+                <!-- profile pic -->
                 <button class="header__profile--user">
                     <img src="../assets/image-avatar.png" alt="Avatar Image">
                 </button>
@@ -191,14 +223,118 @@ export default {
         }
 
         &--cart-btn {
+            position: relative;
             background: transparent;
             border: none;
             cursor: pointer;
             transition: $ts-200;
-            opacity: 0.7;
+            
+            svg {
+                opacity: 0.7;
+            }
 
             &:hover {
-                opacity: 1;
+                svg {
+                    opacity: 1;
+                }
+            }
+
+            .notification {
+                position: absolute;
+                top: -10px;
+                right: -10px;
+                width: 18px;
+                height: 18px;
+                background: $clr-orange;
+                color: $clr-white;
+                font-size: 14px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-radius: 50%;
+            }
+        }
+
+        &--cart {
+            position: absolute;
+            top: 100px;
+            right: 15px;
+            width: 360px;
+            min-height: 240px;
+            background: $clr-white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px -5px rgba(0,0,0,0.1),
+                        0 30px 30px -10px rgba(0,0,0,0.05);
+            
+            @include breakpoint-upto($dev-width-sm) {
+                top: 120px;
+                left: 20px;
+                right: 20px;
+                width: auto;
+            }
+
+            .title {
+                font-size: $fs-md;
+                font-weight: $fw-bold;
+                padding: 20px 25px;
+                border-bottom: 1px solid rgba(182, 188, 200, 0.4);
+            }
+
+            .btn {
+                width: 100%;
+                box-shadow: none;
+                margin-top: 25px;
+            }
+
+            .products {
+                position: relative;
+                padding: 25px;
+
+                .product {
+                    list-style: none;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 5px 0;
+
+                    img {
+                        height: 40px;
+                        border-radius: 5px;
+                    }
+
+                    p {
+                        padding: 0 10px;
+                        font-size: $fs-md;
+                        color: $clr-dark-grayish-blue;
+                        line-height: 1.5;
+
+                        b {
+                            color: $clr-very-dark-blue;
+                            font-weight: $fw-bold;
+                            padding-left: 5px;
+                        }
+                    }
+
+                    button {
+                        background: transparent;
+                        border: none;
+                        cursor: pointer;
+
+                        img {
+                            width: 20px;
+                            object-fit: contain;
+                        }
+                    }
+                }
+            }
+
+            .msg {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 150px;
+                color: $clr-dark-grayish-blue;
+                font-weight: $fw-bold;
             }
         }
 
@@ -230,6 +366,7 @@ export default {
     }
 }
 .container {
+    position: relative;
     max-width: 1174px;
     padding: 40px 32px;
     display: flex;
@@ -240,5 +377,27 @@ export default {
     @include breakpoint-upto($dev-width-md) {
         padding: 30px 32px;
     }
+}
+
+// fade top transition
+.fade-top-enter-from,
+.fade-top-leave-to {
+    transform: translateY(100px);
+    opacity: 0;
+}
+
+.fade-top-enter-active,
+.fade-top-leave-active,
+.list-enter-active,
+.list-leave-active,
+.list-move {
+  transition: all 200ms ease-in-out;
+}
+
+// list transitions
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+    transform: scale(0.6);
 }
 </style>
