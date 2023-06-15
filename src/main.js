@@ -1,10 +1,10 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import './main.scss';
-import Overlay from './components/Overlay.vue';
+import {store} from './store';
 
 const app = createApp(App);
 
-app.component('Overlay', Overlay);
+app.use(store);
 
 app.mount('#app');

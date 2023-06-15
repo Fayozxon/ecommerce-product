@@ -1,13 +1,16 @@
-<script setup>
-import { store } from '../store.js'
-</script>
-
 <script>
 export default {
-    props: ['product'],
     data() {
         return {
             productAmount: 0
+        }
+    },
+    computed: {
+        products() {
+            return this.$store.state.products;
+        },
+        cart() {
+            return this.$store.state.cart;
         }
     },
     methods: {
@@ -18,7 +21,8 @@ export default {
         },
         addToCart() {
             if (this.productAmount > 0) {
-                store.productIDs.push({id: this.product.id, amount: this.productAmount});
+                this.$store.commit('addToCart',{id: 1,amount: this.productAmount});
+                this.productAmount = 0;
             }
         }
     }
@@ -27,17 +31,17 @@ export default {
 
 <template>
   <div class="product-info">
-    <h3 class="product-info__company">{{ product.company }}</h3>
-    <h2 class="product-info__shoes">{{ product.shoes }}</h2>
-    <p class="product-info__description">{{ product.description }}</p>
+    <h3 class="product-info__company">{{ products[0].company }}</h3>
+    <h2 class="product-info__shoes">{{ products[0].shoes }}</h2>
+    <p class="product-info__description">{{ products[0].description }}</p>
 
     <!-- discount -->
-    <div v-if="product.discount" class="product-info__discount">
-        <h3 class="price">{{ product.discountPrice }} <span class="pill">{{ product.discount }}%</span></h3>
-        <h4 class="old-price">{{ product.price }}</h4>
+    <div v-if="products[0].discount" class="product-info__discount">
+        <h3 class="price">${{ products[0].discountPrice }}.00 <span class="pill">{{ products[0].discount }}%</span></h3>
+        <h4 class="old-price">${{ products[0].price }}.00</h4>
     </div>
     <!-- price -->
-    <h4 v-else class="product-info__price">{{ product.price }}</h4>
+    <h4 v-else class="product-info__price">${{ products[0].price }}.00</h4>
 
     <!-- action -->
     <div class="product-info__action">

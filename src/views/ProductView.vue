@@ -14,8 +14,8 @@ export default {
 <template>
     <section class="product-section">
         <div class="container">
-            <ProductLightbox :product="product" />
-            <ProductInfo :product="product" />
+            <ProductLightbox />
+            <ProductInfo />
         </div>
     </section>
 </template>

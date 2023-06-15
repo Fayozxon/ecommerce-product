@@ -1,10 +1,14 @@
 <script>
 export default {
-  props: ['product'],
   data() {
     return {
       activeImage: 1
     }
+  },
+  computed: {
+      products() {
+          return this.$store.state.products;
+      }
   },
   methods: {
     slideRight() {
@@ -30,7 +34,7 @@ export default {
     <!-- preloading images -->
     <img
       v-for="n in 4"
-      :src="`/images/product-${product.id}/image-product-${n}.jpg`"
+      :src="`/images/product-${products[0].id}/image-product-${n}.jpg`"
       style="display: none;"
       preload
     >
@@ -47,7 +51,7 @@ export default {
       <!-- image -->
       <transition mode="out-in" name="product-slide">
         <img
-          :src="`/images/product-${product.id}/image-product-${activeImage}.jpg`"
+          :src="`/images/product-${products[0].id}/image-product-${activeImage}.jpg`"
           :key="activeImage"
           alt="Product Image"
           class="main-image">
@@ -56,7 +60,7 @@ export default {
     <!-- thumbnails -->
     <div class="product-preview__thumbnails">
       <div v-for="n in 4" class="thumbnail" @click="activeImage = n" :class="{active: activeImage == n}">
-        <img :src="`/images/product-${product.id}/image-product-${n}-thumbnail.jpg`">
+        <img :src="`/images/product-${products[0].id}/image-product-${n}-thumbnail.jpg`">
       </div>
     </div>
   </div>

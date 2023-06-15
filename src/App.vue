@@ -27,7 +27,7 @@ export default {
 <template>
 
   <Header />
-  <ProductView :product="product" />
+  <ProductView />
   
 </template>
 

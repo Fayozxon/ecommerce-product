@@ -1,7 +1,3 @@
-<script setup>
-import { store } from '../store.js'
-</script>
-
 <script>
 export default {
     data() {
@@ -9,6 +5,14 @@ export default {
             navLinks: ['collections', 'men', 'women', 'about', 'contact'],
             isNavVisible: false,
             isCartVisible: false
+        }
+    },
+    computed: {
+        products() {
+            return this.$store.state.products;
+        },
+        cart() {
+            return this.$store.state.cart;
         }
     }
 }
@@ -19,7 +23,10 @@ export default {
         <div class="container">
             <div class="header__left">
                 <!-- button -->
-                <button class="header__btn" @click="isNavVisible = !isNavVisible" :class="{show: isNavVisible}">
+                <button
+                  class="header__btn"
+                  @click="isNavVisible = !isNavVisible"
+                  :class="{show: isNavVisible}">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -47,18 +54,18 @@ export default {
             <div class="header__profile">
                 <button class="header__profile--cart-btn" @click="isCartVisible = !isCartVisible">
                     <img src="../assets/icon-cart.svg">
-                    <span v-if="store.productIDs.length" class="notification">{{ store.productIDs.length }}</span>
+                    <span v-if="cart.length" class="notification">{{ cart.length }}</span>
                 </button>
                 <!-- cart -->
                 <transition name="fade-top">
                     <div v-if="isCartVisible" class="header__profile--cart">
                         <h3 class="title">Cart</h3>
-                        <div v-if="store.productIDs.length" class="products">
+                        <div v-if="cart.length" class="products">
                             <transition-group tag="ul" name="list">
-                                <li v-for="product in store.productIDs" :key="product.id" class="product">
+                                <li v-for="product,index in cart" :key="product.id" class="product">
                                     <img :src="`/images/product-${product.id}/image-product-1-thumbnail.jpg`" alt="Product thumbnail">
                                     <p>
-                                        Fall Limited Edition Sneakers $125.00 x 3 <b>$375.00</b>
+                                        {{ products[0].shoes }} ${{ products[0].discountPrice }}.00 x {{ product.amount }} <b>${{ products[0].discountPrice*product.amount }}.00</b>
                                     </p>
                                     <button>
                                         <img src="../assets/icon-delete.svg">
